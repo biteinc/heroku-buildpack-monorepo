@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env bash
 
-console.log("Monorepo setup")
-process.exit(0)
+echo "Monorepo setup"
+exit 0
