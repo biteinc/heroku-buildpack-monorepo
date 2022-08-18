@@ -37,4 +37,4 @@ if [[ -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/.slugignore" ]]; then
     fi
 fi
 
-echo "Copied files successfully" | indent
+echo "Copied Procfile and .slugignore successfully from \"packages/${PACKAGE_NAME}\"" | indent
