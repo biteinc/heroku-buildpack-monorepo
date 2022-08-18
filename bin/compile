@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+indent() {
+    sed -u 's/^/       /'
+}
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+
+PACKAGE_NAME=$(cat "${ENV_DIR}/PACKAGE_NAME")
+
+if [[ -z "${PACKAGE_NAME}" ]]; then
+    echo "PACKAGE_NAME was not set. Aborting" | indent
+    exit 1
+fi
+
+if [[ ! -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/Procfile" ]] && [[ ! -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/.slugignore" ]]; then
+    echo "Procfile and .slugignore were not found. Aborting" | indent
+    exit 1
+fi
+
+
+if [[ -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/Procfile" ]]; then
+    cp "${BUILD_DIR}/packages/${PACKAGE_NAME}/Procfile" "${BUILD_DIR}/Procfile"
+    if ! [ $? ]; then
+      echo "FAILED to copy Procfile" | indent
+      exit 1
+    fi
+fi
+
+if [[ -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/.slugignore" ]]; then
+    cp "${BUILD_DIR}/packages/${PACKAGE_NAME}/.slugignore" "${BUILD_DIR}/.slugignore"
+    if ! [ $? ]; then
+      echo "FAILED to copy .slugignore" | indent
+      exit 1
+    fi
+fi
+
+echo "Copied files successfully" | indent

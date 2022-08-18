@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+
+console.log("Monorepo setup")
+process.exit(0)
