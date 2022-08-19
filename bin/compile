@@ -15,26 +15,34 @@ if [[ -z "${PACKAGE_NAME}" ]]; then
     exit 1
 fi
 
-if [[ ! -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/Procfile" ]] && [[ ! -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/.slugignore" ]]; then
-    echo "Procfile and .slugignore were not found. Aborting" | indent
+if [[ ! -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/Dockerfile" ]] || [[ ! -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/.dockerignore" ]]; then
+    echo "No Dockerfile or heroku.yml found in packages/${PACKAGE_NAME}. Aborting" | indent
     exit 1
 fi
 
 
-if [[ -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/Procfile" ]]; then
-    cp "${BUILD_DIR}/packages/${PACKAGE_NAME}/Procfile" "${BUILD_DIR}/Procfile"
+if [[ -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/heroku.yml" ]]; then
+    cp "${BUILD_DIR}/packages/${PACKAGE_NAME}/heroku.yml" "${BUILD_DIR}/heroku.yml"
     if ! [ $? ]; then
-      echo "FAILED to copy Procfile" | indent
+      echo "FAILED to copy heroku.yml" | indent
       exit 1
     fi
 fi
 
-if [[ -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/.slugignore" ]]; then
-    cp "${BUILD_DIR}/packages/${PACKAGE_NAME}/.slugignore" "${BUILD_DIR}/.slugignore"
+if [[ -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/Dockerfile" ]]; then
+    cp "${BUILD_DIR}/packages/${PACKAGE_NAME}/Dockerfile" "${BUILD_DIR}/Dockerfile"
     if ! [ $? ]; then
-      echo "FAILED to copy .slugignore" | indent
+      echo "FAILED to copy Dockerfile" | indent
       exit 1
     fi
 fi
 
-echo "Copied Procfile and .slugignore successfully from \"packages/${PACKAGE_NAME}\"" | indent
+if [[ -f "${BUILD_DIR}/packages/${PACKAGE_NAME}/.dockerignore" ]]; then
+    cp "${BUILD_DIR}/packages/${PACKAGE_NAME}/.dockerignore" "${BUILD_DIR}/.dockerignore"
+    if ! [ $? ]; then
+      echo "FAILED to copy .dockerignore" | indent
+      exit 1
+    fi
+fi
+
+echo "Copied heroku.yml, Dockerfile, and .dockerignore successfully from \"packages/${PACKAGE_NAME}\"" | indent
